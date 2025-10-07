@@ -10,7 +10,7 @@ export default function DashboardLayout({
     <div className="flex min-h-screen">
       <SidebarProvider>
         <AppSidebar />
-        <main className="w-full">{children}</main>
+        <main className="w-full mt-3">{children}</main>
       </SidebarProvider>
     </div>
   );
