@@ -5,11 +5,11 @@ import { verifyToken } from '@/lib/auth';
 // GET /api/tasks/[id] - Get specific task details
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyToken(request);
-    const taskId = params.id;
+    const { id: taskId } = await params;
     const task = await prisma.task.findUnique({
       where: { id: taskId },
       include: {
@@ -78,11 +78,11 @@ export async function GET(
 // PUT /api/tasks/[id] - Update specific task
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyToken(request);
-    const taskId = params.id;
+    const { id: taskId } = await params;
     const body = await request.json(); // Check if task exists
     const existingTask = await prisma.task.findUnique({
       where: { id: taskId },
@@ -219,7 +219,7 @@ export async function PUT(
 // DELETE /api/tasks/[id] - Delete specific task
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyToken(request);
@@ -231,7 +231,7 @@ export async function DELETE(
         { status: 403 }
       );
     }
-    const taskId = params.id;
+    const { id: taskId } = await params;
 
     // Check if task exists
     const existingTask = await prisma.task.findUnique({

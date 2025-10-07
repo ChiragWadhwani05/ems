@@ -34,7 +34,7 @@ async function checkManagerOrAdmin(request: NextRequest) {
 // POST - Add members to team
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { authorized, error } = await checkManagerOrAdmin(request);
@@ -42,7 +42,7 @@ export async function POST(
       return NextResponse.json({ success: false, error }, { status: 403 });
     }
 
-    const teamId = params.id;
+    const { id: teamId } = await params;
     const body = await request.json();
     const { userIds } = body;
 
@@ -129,7 +129,7 @@ export async function POST(
 // DELETE - Remove members from team
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { authorized, error } = await checkManagerOrAdmin(request);
@@ -137,7 +137,7 @@ export async function DELETE(
       return NextResponse.json({ success: false, error }, { status: 403 });
     }
 
-    const teamId = params.id;
+    const { id: teamId } = await params;
     const body = await request.json();
     const { userIds } = body;
 

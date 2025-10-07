@@ -34,7 +34,7 @@ async function checkManagerOrAdmin(request: NextRequest) {
 // GET - Get team by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { authorized, error } = await checkManagerOrAdmin(request);
@@ -42,7 +42,7 @@ export async function GET(
       return NextResponse.json({ success: false, error }, { status: 403 });
     }
 
-    const teamId = params.id;
+    const { id: teamId } = await params;
 
     if (!teamId) {
       return NextResponse.json(
@@ -118,7 +118,7 @@ export async function GET(
 // PUT - Update team by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { authorized, error } = await checkManagerOrAdmin(request);
@@ -126,7 +126,7 @@ export async function PUT(
       return NextResponse.json({ success: false, error }, { status: 403 });
     }
 
-    const teamId = params.id;
+    const { id: teamId } = await params;
     const body = await request.json();
     const { name, leadId } = body;
 
@@ -223,7 +223,7 @@ export async function PUT(
 // DELETE - Delete team by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { authorized, error } = await checkManagerOrAdmin(request);
@@ -231,7 +231,7 @@ export async function DELETE(
       return NextResponse.json({ success: false, error }, { status: 403 });
     }
 
-    const teamId = params.id;
+    const { id: teamId } = await params;
 
     if (!teamId) {
       return NextResponse.json(

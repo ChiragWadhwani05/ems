@@ -4,7 +4,7 @@ import { isAdmin as checkAdmin } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const isAdmin = await checkAdmin(request);
   if (!isAdmin) {
@@ -12,7 +12,7 @@ export async function GET(
   }
 
   try {
-    const userId = params.id;
+    const { id: userId } = await params;
 
     if (!userId) {
       return NextResponse.json(
@@ -69,7 +69,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Check admin authorization
   const isAdmin = await checkAdmin(request);
@@ -78,7 +78,7 @@ export async function PUT(
   }
 
   try {
-    const userId = params.id;
+    const { id: userId } = await params;
     const body = await request.json();
 
     if (!userId) {
@@ -132,7 +132,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Check admin authorization
   const isAdmin = await checkAdmin(request);
@@ -141,7 +141,7 @@ export async function DELETE(
   }
 
   try {
-    const userId = params.id;
+    const { id: userId } = await params;
 
     if (!userId) {
       return NextResponse.json(
