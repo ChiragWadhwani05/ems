@@ -1,7 +1,17 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  // For development
+  if (process.env.NODE_ENV === 'development') {
+    return 'http://localhost:3000/api';
+  }
+
+  // For production (Vercel)
+  return '/api';
+};
+
 const api = axios.create({
-  baseURL: `${process.env.URL}/api/` || 'http://localhost:3000/api/',
+  baseURL: getBaseURL(),
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
