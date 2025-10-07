@@ -120,7 +120,11 @@ export async function POST(request: NextRequest) {
       const assignedUser = await prisma.user.findFirst({
         where: {
           id: cleanAssignedTo,
-          teamId: teamId,
+          teams: {
+            some: {
+              id: teamId,
+            },
+          },
         },
       });
 
@@ -216,7 +220,14 @@ export async function PUT(request: NextRequest) {
 
     // Employees can only update their own tasks
     if (user.role === 'employee') {
-      const invalidTasks = tasks.filter((task) => task.assignedTo !== user.id);
+      interface Task {
+        id: string;
+        assignedTo: string | null;
+      }
+
+      const invalidTasks: Task[] = tasks.filter(
+        (task: Task) => task.assignedTo !== user.id
+      );
       if (invalidTasks.length > 0) {
         return NextResponse.json(
           { success: false, error: 'You can only update your own tasks' },

@@ -16,11 +16,7 @@ interface User {
   name: string;
   email: string;
   role: string;
-  teamId?: string;
-  Team?: {
-    id: string;
-    name: string;
-  };
+  teams?: { id: string; name: string }[];
 }
 
 export default function UsersPage() {
@@ -95,7 +91,9 @@ export default function UsersPage() {
                   {user.role}
                 </span>
               </TableCell>
-              <TableCell>{user.Team?.name || 'No Team'}</TableCell>
+              <TableCell>
+                {user.teams?.map((team) => team.name).join(', ') || 'No Team'}
+              </TableCell>
             </TableRow>
           ))
         )}

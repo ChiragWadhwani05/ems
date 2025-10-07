@@ -28,8 +28,7 @@ export async function GET(
         name: true,
         email: true,
         role: true,
-        teamId: true,
-        Team: {
+        teams: {
           select: {
             id: true,
             name: true,
@@ -109,8 +108,7 @@ export async function PUT(
         name: true,
         email: true,
         role: true,
-        teamId: true,
-        Team: {
+        teams: {
           select: {
             id: true,
             name: true,

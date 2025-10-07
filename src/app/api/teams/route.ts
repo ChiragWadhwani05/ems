@@ -150,12 +150,13 @@ export async function POST(request: NextRequest) {
 
     // Add members to team if provided
     if (memberIds && Array.isArray(memberIds) && memberIds.length > 0) {
-      await prisma.user.updateMany({
-        where: {
-          id: { in: memberIds },
-        },
+      // Use connect to add users to the team (many-to-many relationship)
+      await prisma.team.update({
+        where: { id: team.id },
         data: {
-          teamId: team.id,
+          members: {
+            connect: memberIds.map((userId: string) => ({ id: userId })),
+          },
         },
       });
 

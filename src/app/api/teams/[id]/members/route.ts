@@ -84,10 +84,14 @@ export async function POST(
       );
     }
 
-    // Add users to team
-    await prisma.user.updateMany({
-      where: { id: { in: userIds } },
-      data: { teamId: teamId },
+    // Add users to team using many-to-many relationship
+    await prisma.team.update({
+      where: { id: teamId },
+      data: {
+        members: {
+          connect: userIds.map((userId: string) => ({ id: userId })),
+        },
+      },
     });
 
     // Fetch updated team with members
@@ -163,13 +167,14 @@ export async function DELETE(
       );
     }
 
-    // Remove users from team (set teamId to null)
-    await prisma.user.updateMany({
-      where: {
-        id: { in: userIds },
-        teamId: teamId, // Only update users who are actually in this team
+    // Remove users from team using many-to-many relationship
+    await prisma.team.update({
+      where: { id: teamId },
+      data: {
+        members: {
+          disconnect: userIds.map((userId: string) => ({ id: userId })),
+        },
       },
-      data: { teamId: null },
     });
 
     // Fetch updated team with members

@@ -131,7 +131,11 @@ export async function PUT(
         const assignedUser = await prisma.user.findFirst({
           where: {
             id: body.assignedTo,
-            teamId: body.teamId || existingTask.teamId,
+            teams: {
+              some: {
+                id: body.teamId || existingTask.teamId,
+              },
+            },
           },
         });
 

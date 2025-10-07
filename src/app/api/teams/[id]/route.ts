@@ -264,11 +264,15 @@ export async function DELETE(
       );
     }
 
-    // Remove team members from the team (set teamId to null)
+    // Remove team members from the team (disconnect from many-to-many)
     if (existingTeam.members.length > 0) {
-      await prisma.user.updateMany({
-        where: { teamId: teamId },
-        data: { teamId: null },
+      await prisma.team.update({
+        where: { id: teamId },
+        data: {
+          members: {
+            set: [], // This disconnects all members from the team
+          },
+        },
       });
     }
 

@@ -392,7 +392,7 @@ export default function TeamDetailsPage() {
                       </TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          {task.assignedToUser.name}
+                          {task.assignedToUser?.name}
                         </div>
                       </TableCell>
                       <TableCell>{getStatusBadge(task.status)}</TableCell>
