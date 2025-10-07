@@ -11,9 +11,10 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Users, Briefcase, CheckSquare, UserCheck } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import api from '@/lib/axios';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
@@ -27,6 +28,7 @@ interface UserData {
 export default function AppSidebar() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -42,9 +44,9 @@ export default function AppSidebar() {
   }, []);
 
   const routes = [
-    { name: 'Users', path: '/dashboard/users' },
-    { name: 'Teams', path: '/dashboard/teams' },
-    { name: 'Tasks', path: '/dashboard/tasks' },
+    { name: 'Users', path: '/dashboard/users', icon: Users },
+    { name: 'Teams', path: '/dashboard/teams', icon: Briefcase },
+    { name: 'Tasks', path: '/dashboard/tasks', icon: CheckSquare },
   ];
 
   const handleLogout = async () => {
@@ -57,7 +59,11 @@ export default function AppSidebar() {
   };
 
   if (userData?.role === 'admin') {
-    routes.push({ name: 'Requests', path: '/dashboard/requests' });
+    routes.push({
+      name: 'Requests',
+      path: '/dashboard/requests',
+      icon: UserCheck,
+    });
   }
 
   return (
@@ -85,15 +91,29 @@ export default function AppSidebar() {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {routes.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.path}>
-                      <span>{item.name}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {routes.map((item) => {
+                const isActive =
+                  pathname === item.path ||
+                  pathname.startsWith(item.path + '/');
+                const IconComponent = item.icon;
+                return (
+                  <SidebarMenuItem key={item.name}>
+                    <SidebarMenuButton
+                      asChild
+                      className={`transition-all duration-200 ${
+                        isActive
+                          ? 'bg-primary text-primary-foreground font-medium shadow-sm border-l-4 border-primary-foreground'
+                          : 'hover:bg-accent hover:text-accent-foreground'
+                      }`}
+                    >
+                      <Link href={item.path}>
+                        <IconComponent className="w-4 h-4" />
+                        <span>{item.name}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
