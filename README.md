@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Employee Management System
 
-## Getting Started
+A modern web application for managing employees, teams, and tasks with role-based access control.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **User Authentication** - JWT-based login/registration with role management
+- **Team Management** - Create teams, assign members (many-to-many relationships)
+- **Task Management** - Create, assign, and track tasks with priority levels
+- **Role-Based Access** - Admin, Manager, and Employee permissions
+- **Real-time Updates** - Dynamic UI with instant feedback
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend**: Next.js 15, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes, Prisma ORM
+- **Database**: PostgreSQL
+- **Authentication**: JWT with HTTP-only cookies
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Quick Start
 
-## Learn More
+1. **Clone and install**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   git clone <repo-url>
+   cd ems
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Environment setup**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```env
+   DATABASE_URL="postgresql://user:password@localhost:5432/ems"
+   JWT_SECRET="your-secret-key"
+   ```
 
-## Deploy on Vercel
+3. **Database setup**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   npx prisma generate
+   npx prisma migrate dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Run development server**
+   ```bash
+   npm run dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+## User Roles
+
+- **Admin**: Full system access, user approval, user management
+- **Employee**: View assigned tasks, update task status
+
+- **Team Lead**: For specific teams, create/manage tasks, view team members
+
+## API Routes
+
+- `/api/auth/*` - Authentication (login, register, logout)
+- `/api/users/*` - User management and profiles
+- `/api/teams/*` - Team operations and member management
+- `/api/tasks/*` - Task creation, assignment, and tracking
+
+## Deployment
+
+Deploy to Vercel with environment variables:
+
+- `DATABASE_URL`
+- `JWT_SECRET`
+
+---
+
+Built with Next.js and modern web technologies.
