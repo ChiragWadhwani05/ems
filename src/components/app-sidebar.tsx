@@ -44,7 +44,6 @@ export default function AppSidebar() {
   }, []);
 
   const routes = [
-    { name: 'Users', path: '/dashboard/users', icon: Users },
     { name: 'Teams', path: '/dashboard/teams', icon: Briefcase },
     { name: 'Tasks', path: '/dashboard/tasks', icon: CheckSquare },
   ];
@@ -59,11 +58,18 @@ export default function AppSidebar() {
   };
 
   if (userData?.role === 'admin') {
-    routes.push({
-      name: 'Requests',
-      path: '/dashboard/requests',
-      icon: UserCheck,
-    });
+    routes.push(
+      {
+        name: 'Users',
+        path: '/dashboard/users',
+        icon: Users,
+      },
+      {
+        name: 'Requests',
+        path: '/dashboard/requests',
+        icon: UserCheck,
+      }
+    );
   }
 
   return (
